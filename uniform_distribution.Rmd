@@ -27,6 +27,86 @@ $f(x) =
   \end{array}
 \right.$
 
+A plot of the xontinuous distribution density function whenb $a = 10$ and $b = 90$ is show in Figure 1.
+
+```{r}
+require(tidyverse)                          # I live in the tidy verse.
+require(cowplot)                            # For publishable graphics
+
+a <- 10                                     # Assign parameter values.
+b <- 90
+
+x <- seq( from = 0,
+          to   = 100,
+          by   = 0.5 )
+
+uniform <-   
+  ifelse( x < a, 0,
+  ifelse( x <= b, 1/(b-a), 0 ))
+
+this_tibble <-
+  tibble( x, uniform )
+
+ggplot( this_tibble,
+        aes(x = x, y = uniform )) +
+  geom_line() +
+  
+  xlab( "X" ) +
+  ylab( "ProbabilityDensity" ) +
+  ggtitle( "Figure 1: Probability of continuous uniform fensity with\n",
+           "paraameters a = 10, b = 90 " ) +
+  theme_cowplot()
+```
+ The mean of thie contibuous uniforma distrinution is given by 
+   
+  $$\mu = \frac{a + b}{2}$$
+  and the standard deviation if given by 
+  
+$$\sigma = \sqrt{ \frac{1}{12}}( b - a )$$
+
+So in our case the mean of our distribution with $a = 10$ and $b = 90$ is
+$$\mu = \frac{10 + 90}{2} = 50$$
+
+and the standard deviation is 
+
+$$\sigma = \sqrt{\frac{1}{12}}( 90 - 10 ) = 23.09401 \approx 23.09$$
+
+## Drawing a random sample
+
+We will now see the effect of various sample sizes on the sahape of the sampleing distribution.  
+We will draw 1000 random sample of various sizes.  We will start with a sample size of and double them sample size until we reach a sample size of 128.
+
+### Sample size of n = 1
+
+```{r}
+# In this code we com[pute the sampling distribution for the samples sizes we
+# listed anove.
+
+set.seed( 11235 )                           # For reproduciability of results.
+
+a = 10
+b = 90
+n <- c( 1, 2, 4, 8, 16, 32, 64, 128 )
+
+means <- rep( NA, 8000 )
+means <- matrix( means, nrow = 1000 )
+
+ 
+for( j in 1:length(n) ){
+  for( i in 1:1000 ){
+    our_sample <- runif( n[j], min = a, max = b )
+    means[i,j] <- mean( our_sample )
+  }
+}
+  
+
+```
+
+The sampling distribution for the sample sizes of 1 is shown below:
 
 
+
+```{r}
+
+```
 
