@@ -36,28 +36,42 @@ require(cowplot)                            # For publishable graphics
 a <- 10                                     # Assign parameter values.
 b <- 90
 
-x <- seq( from = 0,
+x <- seq( from = 0,                         # Define random variable values.
           to   = 100,
           by   = 0.5 )
 
-uniform <-   
+density <-                                  # Compute probability density function
   ifelse( x < a, 0,
   ifelse( x <= b, 1/(b-a), 0 ))
 
-this_tibble <-
+this_tibble <-                              # Create tibble for plotting
   tibble( x, uniform )
 
-ggplot( this_tibble,
-        aes(x = x, y = uniform )) +
-  geom_line() +
-  
-  xlab( "X" ) +
-  ylab( "ProbabilityDensity" ) +
+figure <-
+  ggplot( this_tibble,                        # plot graph
+          aes( x = x, 
+               y = density )) +
+    geom_line() +
+    xlab( "X" ) +
+  ylab( "Probability density" ) +
   ggtitle( "Figure 1: Probability of continuous uniform fensity with\n",
            "paraameters a = 10, b = 90 " ) +
   theme_cowplot()
+
+require( here )                          # Determine project location in file
+                                         # system.
+
+plots <-                                 # Build plot directory path.
+  file.path( here(),
+             "plots" )
+
+figure_01                                # Display plot.
+
+# ggsave( "figure_01.png",
+#         plot = figure_01,
+#         path = plots )
 ```
- The mean of thie contibuous uniforma distrinution is given by 
+ The mean of thie continuous uniforms distrinution is given by 
    
   $$\mu = \frac{a + b}{2}$$
   and the standard deviation if given by 
@@ -107,6 +121,16 @@ The sampling distribution for the sample sizes of 1 is shown below:
 
 
 ```{r}
+source("D:/R-Projects/RStatistics/plot_distribution.R")
 
+sampling_distribution <-
+  means[,1]
+
+Figure_02 <-
+  plot_distribution( sampling_distribution,
+                    expression(bar(X)),
+                    "Sampling distribution with n = 1" )
+Figiur_02
+  
 ```
-
+This plot shows the empirical histogram with a smooth.  Theoretically this histogram should lool like the 
