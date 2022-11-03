@@ -1,0 +1,32 @@
+---
+title: "Example of the Cental Limit Theorem for Uniform Distribution"
+author: "Craig W. Slinkman"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## This is an example of how the sampling distribution of an continuous niform Distribution approaches the normal distribution as the size of the random sample increases.  We will use simulation in this study.
+
+## Definition of a continuous uniform distribution  
+
+[Wikipedia]([linked phrase](http://example.com) defines a continuous distribution as:
+
+>In probability theory and statistics, the continuous uniform distribution or rectangular distribution is a family of symmetric probability distributions. The distribution describes an experiment where there is an arbitrary outcome that lies between certain bounds.[1] The bounds are defined by the parameters, a and b, which are the minimum and maximum values. The interval can either be closed (e.g. [a, b]) or open (e.g. (a, b)).[2] Therefore, the distribution is often abbreviated U (a, b), where U stands for uniform distribution.[1] The difference between the bounds defines the interval length; all intervals of the same length on the distribution's support are equally probable. It is the maximum entropy probability distribution for a random variable X under no constraint other than that it is contained in the distribution's support.[3]
+
+The probability density function for a continuous uniform distribution is:
+
+$f(x) =
+\left\{ 
+  \begin{array}{ c l }
+    \frac{1}{b-a} & \quad \textrm{if } a \leq x \leq b  \\
+    0                 & \quad \textrm{otherwise}
+  \end{array}
+\right.$
+
+
+
+
