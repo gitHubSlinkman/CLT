@@ -30,46 +30,51 @@ $f(x) =
 A plot of the xontinuous distribution density function whenb $a = 10$ and $b = 90$ is show in Figure 1.
 
 ```{r}
-require(tidyverse)                          # I live in the tidy verse.
-require(cowplot)                            # For publishable graphics
+ require(tidyverse)                   # I live in the tidy verse.
+ require(cowplot)                     # For publishable graphics
+ require( here )                      # To get project location in file system.
 
-a <- 10                                     # Assign parameter values.
-b <- 90
 
-x <- seq( from = 0,                         # Define random variable values.
-          to   = 100,
-          by   = 0.5 )
+source("D:/R-Projects/RStatistics/plot_distribution.R")
 
-density <-                                  # Compute probability density function
-  ifelse( x < a, 0,
-  ifelse( x <= b, 1/(b-a), 0 ))
+ 
+ a <- 10                                     # Assign parameter values.
+ b <- 90
+ 
+ x <- seq( from = 0,                         # Define random variable values.
+           to   = 100,
+           by   = 0.5 )
+ 
+ density <-                                  # Compute probability density function
+   ifelse( x < a, 0,
+           ifelse( x <= b, 1/(b-a), 0 ))
+ 
+ this_tibble <-                              # Create tibble for plotting.
+   tibble( x, density )
+ 
+ figure_01 <-
+   ggplot( this_tibble,                        # plot graph
+           aes( x = x, 
+                y = density )) +
+   geom_line() +
+   xlab( "X" ) +
+   ylab( "Probability density" ) +
+   ggtitle( "Figure 1: Probability of continuous uniform fensity with\n",
+            "paraameters a = 10, b = 90 " ) +
+   theme_cowplot()
+ 
+figure_01
 
-this_tibble <-                              # Create tibble for plotting
-  tibble( x, uniform )
-
-figure <-
-  ggplot( this_tibble,                        # plot graph
-          aes( x = x, 
-               y = density )) +
-    geom_line() +
-    xlab( "X" ) +
-  ylab( "Probability density" ) +
-  ggtitle( "Figure 1: Probability of continuous uniform fensity with\n",
-           "paraameters a = 10, b = 90 " ) +
-  theme_cowplot()
-
-require( here )                          # Determine project location in file
-                                         # system.
-
-plots <-                                 # Build plot directory path.
-  file.path( here(),
-             "plots" )
-
-figure_01                                # Display plot.
-
-# ggsave( "figure_01.png",
-#         plot = figure_01,
-#         path = plots )
+ 
+ plots <-                                 # Build plot directory path.
+   file.path( here(),
+              "plots" )
+ 
+ figure_01                                # Display plot.
+ 
+ ggsave( "figure_01.png",                 # Save plot for quora answer.
+         plot = figure_01,
+         path = plots )
 ```
  The mean of thie continuous uniforms distrinution is given by 
    
@@ -126,11 +131,106 @@ source("D:/R-Projects/RStatistics/plot_distribution.R")
 sampling_distribution <-
   means[,1]
 
-Figure_02 <-
+figure_03 <-
   plot_distribution( sampling_distribution,
                     expression(bar(X)),
-                    "Sampling distribution with n = 1" )
-Figiur_02
+                    "Figure 2: Sampling distribution with n = 1" )
+figure_03
+
+ require(tidyverse)                   # I live in the tidy verse.
+ require(cowplot)                     # For publishable graphics
+ require( here )                      # To get project location in file system.
+ 
+ a <- 10                                     # Assign parameter values.
+ b <- 90
+ 
+ x <- seq( from = 0,                         # Define random variable values.
+           to   = 100,
+           by   = 0.5 )
+ 
+ density <-                                  # Compute probability density function
+   ifelse( x < a, 0,
+           ifelse( x <= b, 1/(b-a), 0 ))
+ 
+ this_tibble <-                              # Create tibble for plotting.
+   tibble( x, density )
+ 
+ figure_01 <-
+   ggplot( this_tibble,                        # plot graph
+           aes( x = x, 
+                y = density )) +
+   geom_line() +
+   xlab( "X" ) +
+   ylab( "Probability density" ) +
+   ggtitle( "Figure 2: Sampling distribution with n = 3.")
+   theme_cowplot()
+ 
+figure_03                                 # Display plot.
+ 
+ ggsave( "figure_03.png",                 # Save plot.            
+         plot = figure_03,
+         path = plots )
   
 ```
-This plot shows the empirical histogram with a smooth.  Theoretically this histogram should lool like the 
+This plot shows the empirical histogram with a density smooth.  If we sample frpm a population an infinite number of times the sampling distribution of size one will be equal to the population being sampled.  However because our samples are only of size 1,000 from the population the histogram shows a differing numbering of observation per bin.  
+
+The line on the histogram is called a density smoother.  In statistics to [smooth a data set](https://en.wikipedia.org/wiki/Smoothing) is to create an approximating function that attempts to capture important patterns in the data, while leaving out noise or other fine-scale structures/rapid phenomena. It is a way of dealing with the inherit randomness of noise in our data.
+
+
+### Sample size of 3.
+
+The sampling distribution of the mean for sample size of 2 is shown in Figure 3.
+
+```{r}
+set.seed( 11235 )                    #  For reproducability of results.
+
+a = 10                               # Set uniform parameters
+b = 90
+
+n <- c( 1,                           # Set sample sizes
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128 )
+
+means <-                            # Create matrix to hold means 
+  rep( NA, 8000 )
+means <-                            # Columns represent different sample sizes
+  matrix( means,                    # and rows represent different samples.
+          nrow = 1000 )
+
+
+for( j in 1:length(n) ){            # Loop through sample sizes
+              
+  for( i in 1:1000 ){               # Loop through samples.
+    
+    our_sample <-                   # Sample uniform distribution
+      runif( n[j], 
+             min = a, 
+             max = b )              
+    
+    means[i,j] <-                   # Compute sample means.
+      mean( our_sample )
+  }
+}
+
+sampling_distribution <-
+  means[,2]
+
+figure_03 <-
+  plot_distribution( 
+    sampling_distribution,
+    expression(bar(X)),
+    "Figure 3: Sampling distribution with n = 2" )
+    
+figure_03                                   # Display plot.
+                              
+
+ggsave( "figure_03.png",                    # Save plot.            
+        plot = figure_03,
+        path = plots )
+```
+
